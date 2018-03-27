@@ -1,0 +1,72 @@
+/*body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+*/
+body{	
+	background-color: beige;
+	font-family: sans-serif;
+}
+.jumbotron{
+	background-color: beige;
+}
+#button1{
+	background-color: green;
+}
+#swimlanes{
+	display: flex;
+	flex-wrap: nowrap;
+	overflow: scroll;
+	position: relative;
+}
+.swimlane {
+	border: 1px solid black;
+	width: 200px;
+	height: 100vh;
+	background-color: lightblue;
+	overflow: scroll; 
+	margin-left: 50px; 
+	margin-top: 20px;
+	padding-left: 10px;
+	position: absolute;
+	border-radius: 4px;
+}
+
+.swimlaneHeader{
+	margin: 10px;
+	padding-left: 30px;
+	font-weight: bold;
+
+}
+.icons{
+	margin: 20px;
+}
+.card{
+	min-height:200px; 
+	background-color: white;
+	border: 1px solid lightgrey;
+	border-radius: 5px;
+	margin-right: 10px;
+	margin-bottom: 20px;
+}
+
+.cardHeader{
+	margin-left: 10px;
+}
+.card-white{
+	background-color: white;
+}
+
+.cardDescription{
+	padding-left: 10px;
+	font-family: 'Roboto', sans-serif;
+	font-size: 14px;
+	color: black;
+	height:auto;
+	overflow: auto;
+}
+

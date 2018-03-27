@@ -1,0 +1,19 @@
+{
+  "name": "restifycrl",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mysql2": "^1.5.3",
+    "nodemon": "^1.17.1",
+    "restify": "^6.3.4",
+    "sequelize": "^4.37.2",
+    "uuid": "^3.2.1"
+  },
+  "devDependencies": {},
+  "description": ""
+}
