@@ -7,67 +7,98 @@ a {
   color: #00B7FF;
 }
 */
-section{	
-	background-color: #00B7FF;
-	font-family: sans-serif;
-}
-.jumbotron {
-	background-color: purple;
+
+section {
+    background-color: #006EB7;
+    font-family: sans-serif;
+    padding-bottom: 17px;
 }
 
-#button1{
-	background-color: green;
+
+#button1:hover {
+    background-color: white;
+    color: #005E9C;
 }
-#swimlanes{
-	display: flex;
-	flex-wrap: nowrap;
-	overflow: scroll;
-	position: relative;
-	background-color: #00B7FF;
+
+#button2 {
+    margin: 30px;
 }
+
+#button2:hover {
+    background-color: white;
+    color: #005E9C;
+}
+
+.board {
+    margin-left: 30vw;
+    padding-top: 10px;
+    color: white;
+    font-weight: bold;
+}
+
+.header {
+    background-color: #005E9C;
+}
+
+#swimlanes {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: scroll;
+    position: relative;
+    background-color: #006EB7;
+}
+
+html {
+    background-color: #006EB7;
+}
+
 .swimlane {
-	border: 1px solid black;
-	min-width: 300px;
-	height: 100vh;
-	background-color: grey;
-	overflow: scroll; 
-	margin-left: 50px; 
-	margin-top: 20px;
-	padding-left: 10px;
-	position: absolute;
-	border-radius: 4px;
-}
-.swimlaneHeader{
-	margin: 10px;
-	padding-left: 30px;
-	font-weight: bold;
-
-}
-.icons{
-	margin: 20px;
-}
-.card{
-	min-height:200px; 
-	background-color: white;
-	border: 1px solid lightgrey;
-	border-radius: 5px;
-	margin-right: 10px;
-	margin-bottom: 20px;
+    border: 1px solid black;
+    min-width: 300px;
+    height: 100vh;
+    background-color: #d0d7e2;
+    overflow: scroll;
+    margin-left: 25px;
+    margin-top: 20px;
+    padding-left: 10px;
+    position: absolute;
+    border-radius: 4px;
 }
 
-.cardHeader{
-	margin-left: 10px;
-}
-.card-white{
-	background-color: white;
-}
-
-.cardDescription{
-	padding-left: 10px;
-	font-family: 'Roboto', sans-serif;
-	font-size: 14px;
-	color: black;
-	height:auto;
-	overflow: auto;
+.swimlaneHeader {
+    margin: 10px;
+    text-align: center;
+    font-weight: bold;
 }
 
+.icons {
+    margin: 33px;
+}
+
+.card {
+    min-height: 200px;
+    background-color: white;
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    margin-right: 10px;
+    margin-bottom: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.cardHeader {
+    text-align: center;
+}
+
+.card-white {
+    background-color: #d0d7e2;
+}
+
+.cardDescription {
+    padding-left: 20px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    color: black;
+    height: auto;
+    overflow: auto;
+}
