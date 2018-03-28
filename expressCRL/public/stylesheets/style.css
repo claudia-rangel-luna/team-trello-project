@@ -7,13 +7,14 @@ a {
   color: #00B7FF;
 }
 */
-body{	
-	background-color: beige;
+section{	
+	background-color: #00B7FF;
 	font-family: sans-serif;
 }
-.jumbotron{
-	background-color: beige;
+.jumbotron {
+	background-color: purple;
 }
+
 #button1{
 	background-color: green;
 }
@@ -22,12 +23,13 @@ body{
 	flex-wrap: nowrap;
 	overflow: scroll;
 	position: relative;
+	background-color: #00B7FF;
 }
 .swimlane {
 	border: 1px solid black;
-	width: 200px;
+	min-width: 300px;
 	height: 100vh;
-	background-color: lightblue;
+	background-color: grey;
 	overflow: scroll; 
 	margin-left: 50px; 
 	margin-top: 20px;
@@ -35,7 +37,6 @@ body{
 	position: absolute;
 	border-radius: 4px;
 }
-
 .swimlaneHeader{
 	margin: 10px;
 	padding-left: 30px;
