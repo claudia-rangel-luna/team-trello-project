@@ -40,8 +40,6 @@ section {
     background-color: #005E9C;
 }
 
-
-
 #swimlanes {
     display: flex;
     flex-wrap: nowrap;
