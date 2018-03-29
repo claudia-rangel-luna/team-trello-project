@@ -6,8 +6,7 @@ $('document').ready(function() {
             if(swimlaneName == null){
                 return null;
             } 
-           
-
+            
         var id = getNewId();
         drawSwimlane(id, swimlaneName);
         saveSwimlane({id: id, name: swimlaneName});   
@@ -15,7 +14,6 @@ $('document').ready(function() {
 });
 
 var newSwimlane;
-
 
 function renderExistingSwimlanes() {
     $.ajax({
