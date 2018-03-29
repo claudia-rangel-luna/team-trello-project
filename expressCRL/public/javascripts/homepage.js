@@ -49,18 +49,25 @@ function drawboard(id, name) {
     var boardHeader = $('<div class="boardHeader">' + name + '</div>');
     newBoard.append(boardHeader);
 
-    var buttons = $('<div class="buttons"><i class="fas fa-trash-alt icons"></i><i class="fas fa-pencil-alt icons"></i></div>');
+    var buttons = $('<div class="buttonshomepage"><i class="fas fa-trash-alt icons"></i><i class="fas fa-pencil-alt icons"></i></div>');
     newBoard.append(buttons);
 
     buttons.on('click', '.fa-trash-alt', function() {
+        var deleteBoard = confirm('Are you sure you want to delete this board it may contain swimlanes and cards?');
+        
+        if (deleteBoard == false) {
+            return null;
+        }
         $(this).closest('.board').remove();
-
     });
 
     buttons.on('click', '.fa-pencil-alt', function() {
         var newName = prompt('New board name');
+        if (newName == null) {
+            return null;
+        }
         boardHeader.text(newName);
-        updateSwimlane(id, newName);
+        updateBoard(id, newName);
     });
 
     $('#boards').append(newBoard);
