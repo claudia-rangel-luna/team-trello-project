@@ -182,16 +182,7 @@ function saveSwimlane(swimlane) {
         });
 }
 
-function updateSwimlane(id, name){
-    $.ajax({
-            method: "POST",
-            url: "http://localhost:8080/swimlanes/" + id,
-            data: {name: name}
-        })
-        .done(function(swimlane) {
-            alert("Swimlane Updated: " + swimlane);
-        });
-}
+
 
 function updateCard(id, name){
     $.ajax({
