@@ -1,13 +1,12 @@
 $('document').ready(function() {
     renderExistingSwimlanes();
-   
-    $('button').on('click', function() {
+
+    $('#button1').on('click', function() {
         var swimlaneName = prompt('New swimlane name');
             if(swimlaneName == null){
                 return null;
             } 
-           
-
+            
         var id = getNewId();
         drawSwimlane(id, swimlaneName);
         saveSwimlane({id: id, name: swimlaneName});   
@@ -62,23 +61,9 @@ function getNewId(){
 function drawSwimlane(id, name) {
 	newSwimlane = $('<div id="' + id +'" class="swimlane"></div>');
 
-    newSwimlane.draggable({
-        start: function() {
-            $(this).css("zIndex", 100);
-        }
-    });
-    newSwimlane.droppable({
-        drop: function(event, ui) {
-            var otherSwimlane = ui.draggable;
-            var thisSwimlane = $(this);
+    moveSwimlanes(id, name, newSwimlane);
 
-            otherSwimlane.detach();
-            otherSwimlane.insertAfter(thisSwimlane);
-            otherSwimlane.css("zIndex", 0);
-
-        }
-    });
-
+   
     var swimlaneHeader = $('<div class="swimlaneHeader">' + name + '</div>');
     newSwimlane.append(swimlaneHeader);
 
@@ -92,14 +77,8 @@ function drawSwimlane(id, name) {
 
     buttons.on('click', '.fa-pencil-alt', function() {
         var newName = prompt('New swimlane name');
-         swimlaneHeader.text(newName);
-
-        //update header with new name
-        // save new name to restify server
-
+        swimlaneHeader.text(newName);
         updateSwimlane(id, newName);
-        
-      
     });
 
     buttons.on('click', '.fa-plus', function() {
@@ -113,17 +92,38 @@ function drawSwimlane(id, name) {
             } 
         
         var cardId = getNewId();
-        drawCard(cardId, id, cardHeader, cardDescription);       
+        drawCard(cardId, id, cardHeader, cardDescription, newSwimlane);       
         saveCard({id: cardId, swimlane_id: id, name: cardHeader, cardDescription: cardDescription});
     })
 
     $('#swimlanes').append(newSwimlane);
 }
 
-function drawCard(cardId, swimlaneId, name, cardDescription) {
-	
-    	var card = $('<div class="card"></div>');
+function moveSwimlanes(id, name, newSwimlane){
 
+     newSwimlane.draggable({
+        start: function() {
+            $(this).css("zIndex", 100);
+        }
+    });
+    newSwimlane.droppable({
+        drop: function(event, ui) {
+            var otherSwimlane = ui.draggable;
+            var thisSwimlane = $(this);
+
+            otherSwimlane.detach().css({top: 0,left: 0});
+            otherSwimlane.insertBefore(thisSwimlane);
+            otherSwimlane.css("zIndex", 0).appendTo("#swimlanes");
+        }
+    });
+
+}
+
+function drawCard(cardId, swimlaneId, name, cardDescription, newSwimlane) {
+	
+    	var card = $('<div id="' + cardId +'" class="card"></div>');
+
+        
         card.draggable({
              start: function() {
             $(this).css("zIndex", 100);
@@ -134,8 +134,9 @@ function drawCard(cardId, swimlaneId, name, cardDescription) {
                 var otherCard = ui.draggable;
                 var thisCard = $(this);
 
-                otherCard.detach();
-                otherCard.insertBefore(thisCard);
+                otherCard.detach().css({top: 0, left: 0});
+                
+                otherCard.insertAfter(thisCard).appendTo("#" + swimlaneId);
                 otherCard.css("zIndex", 0);
             }
         });

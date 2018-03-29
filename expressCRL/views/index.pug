@@ -1,12 +1,11 @@
 extends layout
 
 block content
-	.jumbotron.jumbotron-fluid
-		.container
-			h1.display-4 Trello Board: team project
+	.d-flex.header
+		h1.board Home Page: Team Project
 	|
 	section
 		.d-flex.justify-content-center
-			button#button1.btn.btn-primary.border.border-dark.mr-3.mt-3.ml3(type='button') New Swimlane
+			button#button1.btn.btn-primary.mr-3.mt-3.ml3(type='button') New Board
 	|
-	#swimlanes
+	#boards
