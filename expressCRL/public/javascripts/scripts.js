@@ -1,7 +1,7 @@
 $('document').ready(function() {
     renderExistingSwimlanes();
 
-    $('button').on('click', function() {
+    $('#button1').on('click', function() {
         var swimlaneName = prompt('New swimlane name');
             if(swimlaneName == null){
                 return null;
