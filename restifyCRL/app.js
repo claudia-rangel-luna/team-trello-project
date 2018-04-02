@@ -10,7 +10,7 @@ server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser());
 
 // setup the mysql configuration
-const sql = new Sequelize('swimlanes', 'root', 'Luna12094*', {
+const sql = new Sequelize('swimlanes', 'root', 'MyD@1s3y', {
 	host: 'localhost',
 	port: 3306,
 	dialect: 'mysql',
