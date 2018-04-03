@@ -11,37 +11,37 @@ server.use(restify.plugins.bodyParser());
 
 // setup the mysql configuration
 const sql = new Sequelize('Swimlanes', 'root', 'Luna12094*', {
-	host: 'localhost',
-	port: 3306,
-	dialect: 'mysql',
-	operatorsAliases: false,
-	pool: {
-		max: 5,
-		min: 0,
-		acuire: 30000,
-		idle: 10000
-	}
+    host: 'localhost',
+    port: 3306,
+    dialect: 'mysql',
+    operatorsAliases: false,
+    pool: {
+        max: 5,
+        min: 0,
+        acuire: 30000,
+        idle: 10000
+    }
 });
 
 // make the connection
 sql
-	.authenticate()
-	.then(() => {
-		console.log("The connection was successful!");
-	})
-	.catch(err => {
-		console.log("There was an error when connecting!");
-	});
+    .authenticate()
+    .then(() => {
+        console.log("The connection was successful!");
+    })
+    .catch(err => {
+        console.log("There was an error when connecting!");
+    });
 
 var Swimlane = sql.define('swimlanes', {
-	id: { type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4 },
-	name: { type: Sequelize.STRING }
+    id: { type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4 },
+    name: { type: Sequelize.STRING }
 });
 
 var Card = sql.define('cards', {
-	id: {type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4},
-	name: {type: Sequelize.STRING},	
-	cardDescription: {type: Sequelize.STRING}
+    id: { type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4 },
+    name: { type: Sequelize.STRING },
+    cardDescription: { type: Sequelize.STRING }
 });
 
 
@@ -52,120 +52,127 @@ Swimlane.hasMany(Card);
 sql.sync();
 
 function getSwimlanes(req, res, next) {
-	// Restify currently has a bug which doesn't allow you to set default headers
-	// These headers comply with CORS and allow us to serve our response to any origin
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    // Restify currently has a bug which doesn't allow you to set default headers
+    // These headers comply with CORS and allow us to serve our response to any origin
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
-	//find the appropriate data
-	Swimlane.findAll().then((Swimlane) => {
-		res.send(Swimlane);
-	});	
+    //find the appropriate data
+    Swimlane.findAll().then((Swimlane) => {
+        res.send(Swimlane);
+    });
 }
 
 function getCards(req, res, next) {
-	// Restify currently has a bug which doesn't allow you to set default headers
-	// These headers comply with CORS and allow us to serve our response to any origin
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    // Restify currently has a bug which doesn't allow you to set default headers
+    // These headers comply with CORS and allow us to serve our response to any origin
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
-	//find the appropriate data
-	Card.findAll().then((Card) =>{
-		res.send(Card);
-	});
+    //find the appropriate data
+    Card.findAll().then((Card) => {
+        res.send(Card);
+    });
 }
 
 function postSwimlane(req, res, next) {
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Headers", "X-Requested-With");
-	
-	console.log(req.body);
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
-	
-	// save the new message to the collection
-	Swimlane.create({
-		id: req.body.id,
-		name: req.body.name
-	}).then((swimlane) => {
-		res.send(swimlane);
-	});	
+    console.log(req.body);
+
+
+    // save the new message to the collection
+    Swimlane.create({
+        id: req.body.id,
+        name: req.body.name
+    }).then((swimlane) => {
+        res.send(swimlane);
+    });
 }
 
 function postCard(req, res, next) {
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Headers", "X-Requested-With");
-	
-	console.log(req.body);
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
-	
-	// save the new message to the collection
-	Swimlane.findAll({
-		where: {id: req.body.swimlane_id}
-	})
-	.then((Swimlane) => {
-		Card.create({
-			id: req.body.id,
-			name: req.body.name,
-			cardDescription: req.body.cardDescription
-		}).then((card) => {
-			card.setSwimlane(Swimlane[0]);
-			res.send(card);
-		});
-	});	
+    console.log(req.body);
+
+
+    // save the new message to the collection
+    Swimlane.find({
+            where: { id: req.body.swimlane_id }
+        })
+        .then((Swimlane) => {
+            Card.create({
+                id: req.body.id,
+                name: req.body.name,
+                cardDescription: req.body.cardDescription
+            }).then((card) => {
+                card.setSwimlane(Swimlane);
+                res.send(card);
+            });
+        });
 }
 
-function getCardBySwimlaneId (req, res, next){
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Headers", "X-Requested-With");
-	
-	console.log(req.params)
+function getCardBySwimlaneId(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
-	Card.findAll({
-		where: {swimlaneId: req.params.swimlane_id}
-	})
-	.then((Card) => {
-		res.send(Card);
-	});
+    console.log(req.params)
+
+    Card.findAll({
+            where: { swimlaneId: req.params.swimlane_id }
+        })
+        .then((Card) => {
+            res.send(Card);
+        });
 }
 
-function updateSwimlaneById (req, res, next){
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Headers", "X-Requested-With");
-	
-	// get swimlaneId from URL
-	var swimlaneId =  req.params.swimlane_id;
+function updateSwimlaneById(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
-	// get newSwimlane from body
-	var name = req.body.name;
+    // get swimlaneId from URL
+    var swimlaneId = req.params.swimlane_id;
 
-	// find swimlane by swimlane ID
-	// var swimlane = Swimlane.find(function(swimlane){
-	// 	return swimlane.id == swimlaneId;
-	// });
+    // get newSwimlane from body
+    var name = req.body.name;
 
-	// update Swimlane name property
-	// swimlane.name = name;
-
-	// return swimlane to caller
-	// res.send(swimlane);
+    Swimlane.find({
+        where: { id: swimlaneId }
+    }).then((swimlane) => {
+        if (swimlane) {
+            swimlane.updateAttributes({
+                name: name
+            })
+        }
+        res.send(swimlane);
+    });
 }
 
-function updateCardById (req, res, next){
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Headers", "X-Requested-With");
-	
-	var card_id = req.params.card_id;
+function updateCardById(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
-	// var card = Card.find(function(card){
-	// 	return card.id == card_id;
-	// });
-	// if(req.body.name){
-		// card.name = req.body.name;
-	// }
-	// if(req.body.description){
-		// card.cardDescription = req.body.description;
-	//}
-	// res.send(card);
+    var card_id = req.params.card_id;
+
+    Card.find({
+        where: { id: card_id }
+    }).then((card) => {
+        if (card) {
+            if (req.body.name) {
+                card.updateAttributes({
+                    name: req.body.name
+                });
+            }
+            if (req.body.description) {
+                card.updateAttributes({
+                    cardDescription: req.body.description
+                });
+            }
+        }
+        res.send(card);
+    });
 }
 
 
@@ -184,5 +191,5 @@ server.get('/cards', getCards);
 server.post('/cards', postCard);
 
 server.listen(8080, function() {
-	console.log('%s listening at %s', server.name, server.url);
+    console.log('%s listening at %s', server.name, server.url);
 });

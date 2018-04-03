@@ -77,6 +77,9 @@ function drawSwimlane(id, name) {
 
     buttons.on('click', '.fa-pencil-alt', function() {
         var newName = prompt('New swimlane name');
+        if(newName == null){
+                return null;
+            } 
         swimlaneHeader.text(newName);
         updateSwimlane(id, newName);
     });
@@ -182,7 +185,16 @@ function saveSwimlane(swimlane) {
         });
 }
 
-
+function updateSwimlane(id, newName){
+    $.ajax({
+            method: "POST",
+            url: "http://localhost:8080/swimlanes/" + id,
+            data: {name: newName}
+        })
+        .done(function(swimlane) {
+            alert("Swimlane Updated: " + swimlane);
+        });
+}
 
 function updateCard(id, name){
     $.ajax({
@@ -199,7 +211,7 @@ function updateCardDescription(id, cardDescription){
     $.ajax({
             method: "POST",
             url: "http://localhost:8080/swimlanes/cards/" + id,
-            data: {cardDescription: cardDescription}
+            data: {description: cardDescription}
         })
         .done(function(card) {
             alert("Card description Updated: " + card);
