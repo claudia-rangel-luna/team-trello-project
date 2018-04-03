@@ -10,7 +10,7 @@ server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser());
 
 // setup the mysql configuration
-const sql = new Sequelize('swimlanes', 'root', 'MyD@1s3y', {
+const sql = new Sequelize('Swimlanes', 'root', 'Luna12094*', {
 	host: 'localhost',
 	port: 3306,
 	dialect: 'mysql',
@@ -33,12 +33,12 @@ sql
 		console.log("There was an error when connecting!");
 	});
 
-var Swimlanes = sql.define('swimlane', {
+var Swimlane = sql.define('swimlanes', {
 	id: { type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4 },
 	name: { type: Sequelize.STRING }
 });
 
-var Cards = sql.define('card', {
+var Card = sql.define('cards', {
 	id: {type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4},
 	name: {type: Sequelize.STRING},	
 	cardDescription: {type: Sequelize.STRING}
@@ -46,7 +46,8 @@ var Cards = sql.define('card', {
 
 
 // create associations
-Cards.Swimlanes = Cards.belongsTo(Swimlanes);
+Card.belongsTo(Swimlane);
+Swimlane.hasMany(Card);
 
 sql.sync();
 
@@ -57,8 +58,8 @@ function getSwimlanes(req, res, next) {
 	res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
 	//find the appropriate data
-	Swimlanes.findAll().then((swimlanes) => {
-		res.send(swimlanes);
+	Swimlane.findAll().then((Swimlane) => {
+		res.send(Swimlane);
 	});	
 }
 
@@ -69,8 +70,8 @@ function getCards(req, res, next) {
 	res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
 	//find the appropriate data
-	Cards.findAll().then((cards) =>{
-		res.send(cards);
+	Card.findAll().then((Card) =>{
+		res.send(Card);
 	});
 }
 
@@ -82,7 +83,7 @@ function postSwimlane(req, res, next) {
 
 	
 	// save the new message to the collection
-	Swimlanes.create({
+	Swimlane.create({
 		id: req.body.id,
 		name: req.body.name
 	}).then((swimlane) => {
@@ -98,32 +99,32 @@ function postCard(req, res, next) {
 
 	
 	// save the new message to the collection
-	Swimlanes.findAll({
+	Swimlane.findAll({
 		where: {id: req.body.swimlane_id}
 	})
-	.then((swimlanes) => {
-		Cards.create({
+	.then((Swimlane) => {
+		Card.create({
 			id: req.body.id,
 			name: req.body.name,
 			cardDescription: req.body.cardDescription
 		}).then((card) => {
-			card.setSwimlanes(swimlanes[0]);
+			card.setSwimlane(Swimlane[0]);
 			res.send(card);
 		});
 	});	
 }
 
-function getCardsBySwimlaneId (req, res, next){
+function getCardBySwimlaneId (req, res, next){
 	res.header("Access-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Headers", "X-Requested-With");
 	
 	console.log(req.params)
 
-	Cards.findAll({
+	Card.findAll({
 		where: {swimlaneId: req.params.swimlane_id}
 	})
-	.then((cards) => {
-		res.send(cards);
+	.then((Card) => {
+		res.send(Card);
 	});
 }
 
@@ -138,11 +139,11 @@ function updateSwimlaneById (req, res, next){
 	var name = req.body.name;
 
 	// find swimlane by swimlane ID
-	// var swimlane = swimlanes.find(function(swimlane){
+	// var swimlane = Swimlane.find(function(swimlane){
 	// 	return swimlane.id == swimlaneId;
 	// });
 
-	// update swimlanes name property
+	// update Swimlane name property
 	// swimlane.name = name;
 
 	// return swimlane to caller
@@ -155,7 +156,7 @@ function updateCardById (req, res, next){
 	
 	var card_id = req.params.card_id;
 
-	// var card = cards.find(function(card){
+	// var card = Card.find(function(card){
 	// 	return card.id == card_id;
 	// });
 	// if(req.body.name){
@@ -173,7 +174,7 @@ function updateCardById (req, res, next){
 server.get('/swimlanes', getSwimlanes);
 server.post('/swimlanes', postSwimlane);
 
-server.get('/swimlanes/:swimlane_id/cards', getCardsBySwimlaneId);
+server.get('/swimlanes/:swimlane_id/cards', getCardBySwimlaneId);
 
 server.post('/swimlanes/:swimlane_id', updateSwimlaneById);
 

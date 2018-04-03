@@ -1,5 +1,5 @@
 $('document').ready(function() {
-    renderExistingSwimlanes();
+    renderExistingBoards();
 
     $('#addboardbutton').on('click', function() {
         var boardName = prompt('New  board name');
