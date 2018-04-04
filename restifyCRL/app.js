@@ -11,7 +11,7 @@ server.use(restify.plugins.bodyParser());
 
 // setup the mysql configuration
 
-const sql = new Sequelize('Trello', 'root', 'pizzaseven11', {
+const sql = new Sequelize('Trello', 'root', 'Luna12094*', {
     host: 'localhost',
     port: 3306,
     dialect: 'mysql',
@@ -214,13 +214,59 @@ function updateCardById(req, res, next) {
         }
         res.send(card);
     });
-
-    
 }
 
+function removeSwimlane(req, res, next){
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+   
 
+
+    // get swimlaneId from URL
+    var swimlaneId = req.params.swimlane_id;    
+
+    Swimlane.find({
+        where: { id: swimlaneId }
+    }).then((Swimlane) => {
+        
+        Swimlane.destroy();
+    });
+
+    res.send(200);
+}
+
+function removeCards(req, res, next){
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+   
+    
+    var card_id = req.params.card_id;  
+
+    Card.find({
+        where: { id: card_id }
+    }).then((card) => {
+        
+        card.destroy();
+    });
+
+    res.send(200);
+}
 
 // Set up our routes and start the server
+server.opts('/swimlanes/:swimlane_id', (req, res) =>{
+    res.setHeader('Access-Control-Allow-Origin', "*");
+    res.setHeader('Access-Control-Allow-Headers', 'Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+    res.send(200);
+});
+
+server.opts('/swimlanes/cards/:card_id', (req, res) =>{
+    res.setHeader('Access-Control-Allow-Origin', "*");
+    res.setHeader('Access-Control-Allow-Headers', 'Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+    res.send(200);
+});
+
 server.get('/boards', getBoards);
 
 server.post('/boards', postBoard);
@@ -239,6 +285,10 @@ server.post('/swimlanes/cards/:card_id', updateCardById);
 
 server.get('/cards', getCards);
 server.post('/cards', postCard);
+
+server.del('/swimlanes/:swimlane_id', removeSwimlane);
+
+server.del('/swimlanes/cards/:card_id', removeCards);
 
 server.listen(8080, function() {
     console.log('%s listening at %s', server.name, server.url);

@@ -71,7 +71,13 @@ function drawSwimlane(id, name) {
     newSwimlane.append(buttons);
 
     buttons.on('click', '.fa-trash-alt', function() {
+        var deleteSwimlane = confirm("Are you sure you want to delete swimlane? It may contain cards.");
+            if(deleteSwimlane == false){
+                return null; 
+            };
+
         $(this).closest('.swimlane').remove();
+        removeSwimlane(id);
 
     });    
 
@@ -155,7 +161,12 @@ function drawCard(cardId, swimlaneId, name, cardDescription, newSwimlane) {
         $("#"+ swimlaneId).append(card);
 
         cardButtons.on('click', '.fa-trash-alt', function() {
+            var deleteCard = confirm("Are you sure you want to delete swimlane? It may contain cards.");
+            if(deleteCard == false){
+                return null; 
+            };
             $(this).closest('.card').remove();
+            removeCard(cardId);
         });
 
         cardButtons.on('click', '.pencil_card', function() {
@@ -173,6 +184,26 @@ function drawCard(cardId, swimlaneId, name, cardDescription, newSwimlane) {
 
         })
     }
+
+function removeSwimlane(id){
+    $.ajax({
+            method: "DELETE",
+            url: "http://localhost:8080/swimlanes/" + id
+        })
+        .done(function(swimlane) {
+            alert("Swimlane deleted: " + swimlane);
+        });
+}
+
+function removeCard(id){
+    $.ajax({
+            method: "DELETE",
+            url: "http://localhost:8080/swimlanes/cards/" + id
+        })
+        .done(function(card) {
+            alert("Card deleted: " + card);
+        });
+}
 
 function saveSwimlane(swimlane) {
     $.ajax({
