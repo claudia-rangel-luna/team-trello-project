@@ -10,7 +10,8 @@ server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser());
 
 // setup the mysql configuration
-const sql = new Sequelize('Swimlanes', 'root', 'Luna12094*', {
+
+const sql = new Sequelize('Trello', 'root', 'pizzaseven11', {
     host: 'localhost',
     port: 3306,
     dialect: 'mysql',
@@ -33,6 +34,11 @@ sql
         console.log("There was an error when connecting!");
     });
 
+var Board = sql.define('boards', {
+    id: { type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4 },
+    name: { type: Sequelize.STRING }
+});
+
 var Swimlane = sql.define('swimlanes', {
     id: { type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4 },
     name: { type: Sequelize.STRING }
@@ -46,10 +52,25 @@ var Card = sql.define('cards', {
 
 
 // create associations
-Card.belongsTo(Swimlane);
+Board.hasMany(Swimlane);
 Swimlane.hasMany(Card);
+Card.belongsTo(Swimlane);
+Swimlane.belongsTo(Board);
+
 
 sql.sync();
+
+function getBoards(req, res, next) {
+    // Restify currently has a bug which doesn't allow you to set default headers
+    // These headers comply with CORS and allow us to serve our response to any origin
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+
+    //find the appropriate data
+    Board.findAll().then((Board) => {
+        res.send(Board);
+    });
+}
 
 function getSwimlanes(req, res, next) {
     // Restify currently has a bug which doesn't allow you to set default headers
@@ -73,6 +94,24 @@ function getCards(req, res, next) {
     Card.findAll().then((Card) => {
         res.send(Card);
     });
+
+}
+
+function postBoard(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+
+    console.log(req.body);
+
+
+    // save the new message to the collection
+    Board.create({
+        id: req.body.id,
+        name: req.body.name
+    }).then((board) => {
+        res.send(board);
+    });
+
 }
 
 function postSwimlane(req, res, next) {
@@ -150,11 +189,13 @@ function updateSwimlaneById(req, res, next) {
     });
 }
 
+
 function updateCardById(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
     var card_id = req.params.card_id;
+
 
     Card.find({
         where: { id: card_id }
@@ -173,12 +214,21 @@ function updateCardById(req, res, next) {
         }
         res.send(card);
     });
+
+    
 }
 
 
 
 // Set up our routes and start the server
+server.get('/boards', getBoards);
+
+server.post('/boards', postBoard);
+
+// server.post('/boards/:board_id', updateBoardById);
+
 server.get('/swimlanes', getSwimlanes);
+
 server.post('/swimlanes', postSwimlane);
 
 server.get('/swimlanes/:swimlane_id/cards', getCardBySwimlaneId);

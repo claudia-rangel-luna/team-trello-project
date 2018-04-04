@@ -8,7 +8,7 @@ $('document').ready(function() {
         }
 
         var id = getNewId();
-        drawboard(id, boardName);
+        drawBoard(id, boardName);
         saveBoard({ id: id, name: boardName });
     });
 });
@@ -26,7 +26,7 @@ function renderExistingBoards() {
 
             for (var i = 0; i < boards.length; i++) {
                 var board = boards[i];
-                drawSwimlane(board.id, board.name);
+                drawBoard(board.id, board.name);
             }
         });
 }
@@ -40,7 +40,7 @@ function getNewId() {
     return id;
 }
 
-function drawboard(id, name) {
+function drawBoard(id, name) {
     newBoard = $('<div id="' + id + '" class="board"></div>');
 
     moveBoards(id, name, newBoard);
@@ -54,7 +54,7 @@ function drawboard(id, name) {
 
     buttons.on('click', '.fa-trash-alt', function() {
         var deleteBoard = confirm('Are you sure you want to delete this board it may contain swimlanes and cards?');
-        
+
         if (deleteBoard == false) {
             return null;
         }
@@ -71,6 +71,8 @@ function drawboard(id, name) {
     });
 
     $('#boards').append(newBoard);
+
+    
 }
 
 function moveBoards(id, name, newBoard) {

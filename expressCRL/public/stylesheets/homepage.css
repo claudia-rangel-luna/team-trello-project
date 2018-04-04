@@ -4,19 +4,25 @@
 }
 .board{
 	background-color: red;
-	width:300px;
+	min-width:300px;
 	flex-wrap: wrap-reverse;
 	margin-left: 20px;
 	border-radius: 4px;
 	text-align: center;
 	height: 200px;
-	font-size: 40px;
+	font-size: 1em;
+	word-wrap: break-word;
 	font-weight: bold;
 	color: white;
-	padding-top: 30px;
+	padding-top: 30px; 
+}
+.boardHeader{
+	text-overflow: ellipsis;
+	white-space: nowrap;
 	overflow: hidden;
-    white-space: nowrap;
-
+}
+.boardHeader:hover{
+	overflow: visible;
 }
 .buttonshomepage .icons{
 	color: black;
