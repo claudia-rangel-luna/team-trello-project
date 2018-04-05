@@ -59,6 +59,7 @@ function drawBoard(id, name) {
             return null;
         }
         $(this).closest('.board').remove();
+        removeBoard(id);
     });
 
     buttons.on('click', '.fa-pencil-alt', function() {
@@ -70,8 +71,11 @@ function drawBoard(id, name) {
         updateBoard(id, newName);
     });
 
-    $('#boards').append(newBoard);
+    var viewBoardButton = $('<button class="viewBoard"> View Board</button>');
+    newBoard.append(viewBoardButton);
 
+
+    $('#boards').append(newBoard);
 
 }
 
@@ -94,6 +98,25 @@ function moveBoards(id, name, newBoard) {
         }
     });
 
+}
+// function linkToViewBoard(id, name){
+//      $.ajax({
+//             method: "POST",
+//             url: "http://localhost:8080/boards/:swimlanes_id/" + id
+//             // data: board
+//         })
+//         .done(function(board) {
+//             alert("Board deleted: " + board);
+//         });
+// }
+function removeBoard(id){
+    $.ajax({
+            method: "DELETE",
+            url: "http://localhost:8080/boards/" + id
+        })
+        .done(function(board) {
+            alert("Board deleted: " + board);
+        });
 }
 
 function saveBoard(board) {

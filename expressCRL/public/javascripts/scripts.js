@@ -209,7 +209,7 @@ changeTitle();
 function removeSwimlane(id){
     $.ajax({
             method: "DELETE",
-            url: "http://localhost:8080/swimlanes/" + id
+            url: "http://localhost:8080/swimlanes/cards" + id
         })
         .done(function(swimlane) {
             alert("Swimlane deleted: " + swimlane);
