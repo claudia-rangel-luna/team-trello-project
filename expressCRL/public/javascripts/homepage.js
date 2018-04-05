@@ -3,10 +3,10 @@ $('document').ready(function() {
 
     $('#addboardbutton').on('click', function() {
         var boardName = prompt('New  board name');
-        if (boardName == null) {
-            return null;
-        }
-
+            if (boardName == null) {
+                return null;
+            }
+            
         var id = getNewId();
         drawBoard(id, boardName);
         saveBoard({ id: id, name: boardName });
@@ -41,7 +41,7 @@ function getNewId() {
 }
 
 function drawBoard(id, name) {
-    newBoard = $('<div id="' + id + '" class="board"></div>');
+    var newBoard = $('<div id="' + id + '" class="board"></div>');
 
     moveBoards(id, name, newBoard);
 
@@ -52,7 +52,9 @@ function drawBoard(id, name) {
     var buttons = $('<div class="buttonshomepage"><i class="fas fa-trash-alt icons"></i><i class="fas fa-pencil-alt icons"></i></div>');
     newBoard.append(buttons);
 
-    buttons.on('click', '.fa-trash-alt', function() {
+    buttons.on('click', '.fa-trash-alt', function(e) {
+        e.stopPropagation();
+
         var deleteBoard = confirm('Are you sure you want to delete this board it may contain swimlanes and cards?');
 
         if (deleteBoard == false) {
@@ -62,7 +64,9 @@ function drawBoard(id, name) {
         removeBoard(id);
     });
 
-    buttons.on('click', '.fa-pencil-alt', function() {
+    buttons.on('click', '.fa-pencil-alt', function(e) {
+        e.stopPropagation();
+
         var newName = prompt('New board name');
         if (newName == null) {
             return null;
@@ -71,14 +75,14 @@ function drawBoard(id, name) {
         updateBoard(id, newName);
     });
 
-    var viewBoardButton = $('<button class="viewBoard"> View Board</button>');
-    newBoard.append(viewBoardButton);
+    newBoard.on('click', function(){
+        window.location.href='/boards?id=' + id;
+    });
 
 
     $('#boards').append(newBoard);
 
 }
-
 
 function moveBoards(id, name, newBoard) {
 
