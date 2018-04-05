@@ -74,10 +74,11 @@ function drawBoard(id, name) {
     var viewBoardButton = $('<button class="viewBoard"> View Board</button>');
     newBoard.append(viewBoardButton);
 
-    
 
     $('#boards').append(newBoard);
+
 }
+
 
 function moveBoards(id, name, newBoard) {
 
