@@ -72,8 +72,9 @@ function drawBoard(id, name) {
 
     $('#boards').append(newBoard);
 
-    
+
 }
+
 
 function moveBoards(id, name, newBoard) {
 
