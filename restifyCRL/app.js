@@ -167,6 +167,29 @@ function getCardBySwimlaneId(req, res, next) {
         });
 }
 
+function updateBoardById(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+
+    // get swimlaneId from URL
+    var boardId = req.params.board_id;
+
+    // get newSwimlane from body
+    var name = req.body.name;
+
+    Board.find({
+        where: { id: boardId }
+    }).then((board) => {
+        if (board) {
+            board.updateAttributes({
+                name: name
+            })
+        }
+        res.send(board);
+    });
+}
+
+
 function updateSwimlaneById(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -216,25 +239,52 @@ function updateCardById(req, res, next) {
     });
 }
 
-function removeSwimlane(req, res, next){
+function removeBoard(req, res, next){
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
    
 
 
     // get swimlaneId from URL
-    var swimlaneId = req.params.swimlane_id;    
+    var boardId = req.params.board_id;    
 
-    Swimlane.find({
-        where: { id: swimlaneId }
-    }).then((Swimlane) => {
+    Board.find({
+        where: { id: boardId }
+    }).then((Board) => {
         
-        Swimlane.destroy();
+        Board.destroy();
     });
 
     res.send(200);
 }
 
+
+function removeSwimlane(req, res, next){
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+
+    // get swimlaneId from URL
+    var swimlaneId = req.params.swimlane_id;    
+    var card_id = req.params.card_id;
+
+
+    Swimlane.find({
+        where: { id: swimlaneId }
+    }).then((Swimlane) => {
+    	Card.find({
+    		where: {id: card_id}
+    	}).then((Card) => {
+    		Card.destroy();
+    	});
+        
+        Swimlane.destroy();
+    
+   
+    // });
+
+    res.send(200);
+	});
+}
 function removeCards(req, res, next){
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -252,8 +302,24 @@ function removeCards(req, res, next){
     res.send(200);
 }
 
+// function linkToViewBoards(req, res, next){
+// 	res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Headers", "X-Requested-With");
+
+//    
+
+// }
+
+
+
 // Set up our routes and start the server
-server.opts('/swimlanes/:swimlane_id', (req, res) =>{
+server.opts('/boards/:board_id', (req, res) =>{
+    res.setHeader('Access-Control-Allow-Origin', "*");
+    res.setHeader('Access-Control-Allow-Headers', 'Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+    res.send(200);
+});
+server.opts('/swimlanes/:swimlane_id/cards/:cards_id', (req, res) =>{
     res.setHeader('Access-Control-Allow-Origin', "*");
     res.setHeader('Access-Control-Allow-Headers', 'Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
@@ -271,7 +337,7 @@ server.get('/boards', getBoards);
 
 server.post('/boards', postBoard);
 
-// server.post('/boards/:board_id', updateBoardById);
+server.post('/boards/:board_id', updateBoardById);
 
 server.get('/swimlanes', getSwimlanes);
 
@@ -286,7 +352,10 @@ server.post('/swimlanes/cards/:card_id', updateCardById);
 server.get('/cards', getCards);
 server.post('/cards', postCard);
 
-server.del('/swimlanes/:swimlane_id', removeSwimlane);
+// server.post('/boards', linkToViewBoards);
+
+server.del('/boards/:board_id', removeBoard);
+server.del('/swimlanes/:swimlane_id/cards/:card_id', removeSwimlane);
 
 server.del('/swimlanes/cards/:card_id', removeCards);
 
