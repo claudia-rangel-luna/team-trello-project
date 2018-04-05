@@ -1,5 +1,7 @@
 $('document').ready(function() {
-    renderExistingSwimlanes();
+    var boardId = getUrlVars()['id'];
+    renderExistingSwimlanes(boardId);
+    console.log(boardId);
 
     $('#button1').on('click', function() {
         var swimlaneName = prompt('New swimlane name');
@@ -9,16 +11,16 @@ $('document').ready(function() {
 
         var id = getNewId();
         drawSwimlane(id, swimlaneName);
-        saveSwimlane({ id: id, name: swimlaneName });
+        saveSwimlane(boardId, { id: id, name: swimlaneName });
     });
 });
 
 var newSwimlane;
 
-function renderExistingSwimlanes() {
+function renderExistingSwimlanes(boardId) {
     $.ajax({
             method: "GET",
-            url: "http://localhost:8080/swimlanes",
+            url: "http://localhost:8080/boards/" + boardId + "/swimlanes",
 
         })
         .done(function(swimlanes) {
@@ -209,7 +211,7 @@ changeTitle();
 function removeSwimlane(id){
     $.ajax({
             method: "DELETE",
-            url: "http://localhost:8080/swimlanes/cards" + id
+            url: "http://localhost:8080/swimlanes/" + id
         })
         .done(function(swimlane) {
             alert("Swimlane deleted: " + swimlane);
@@ -226,10 +228,10 @@ function removeCard(id){
         });
 }
 
-function saveSwimlane(swimlane) {
+function saveSwimlane(boardId, swimlane) {
     $.ajax({
             method: "POST",
-            url: "http://localhost:8080/swimlanes",
+            url: "http://localhost:8080/boards/" + boardId + "/swimlanes",
             data: swimlane
         })
         .done(function(swimlane) {
@@ -291,4 +293,17 @@ function updateBoardTitle(id, boardTitle) {
         .done(function(card) {
             alert("title updated: " + cardtitle);
         });
+}
+
+function getUrlVars()
+{
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+    }
+    return vars;
 }
