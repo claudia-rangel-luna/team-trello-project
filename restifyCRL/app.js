@@ -72,6 +72,19 @@ function getBoards(req, res, next) {
     });
 }
 
+function getSwimlanesByBoardId(req, res, next){
+	res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+
+    var boardId = req.params.board_id;
+
+    Swimlane.findAll({
+    	where: {boardId: boardId}
+    }).then((swimlanes) => {
+    	res.send(swimlanes);
+    });
+}
+
 function getSwimlanes(req, res, next) {
     // Restify currently has a bug which doesn't allow you to set default headers
     // These headers comply with CORS and allow us to serve our response to any origin
@@ -120,14 +133,20 @@ function postSwimlane(req, res, next) {
 
     console.log(req.body);
 
+    var boardId = req.params.board_id;
 
     // save the new message to the collection
-    Swimlane.create({
-        id: req.body.id,
-        name: req.body.name
-    }).then((swimlane) => {
-        res.send(swimlane);
-    });
+    Board.find({
+    	where: {id: boardId}
+    }).then((board) => {
+    	Swimlane.create({
+	        id: req.body.id,
+	        name: req.body.name
+	    }).then((swimlane) => {
+	    	swimlane.setBoard(board);
+	        res.send(swimlane);
+	    });
+	});
 }
 
 function postCard(req, res, next) {
@@ -141,13 +160,13 @@ function postCard(req, res, next) {
     Swimlane.find({
             where: { id: req.body.swimlane_id }
         })
-        .then((Swimlane) => {
+        .then((swimlane) => {
             Card.create({
                 id: req.body.id,
                 name: req.body.name,
                 cardDescription: req.body.cardDescription
             }).then((card) => {
-                card.setSwimlane(Swimlane);
+                card.setSwimlane(swimlane);
                 res.send(card);
             });
         });
@@ -250,9 +269,24 @@ function removeBoard(req, res, next){
 
     Board.find({
         where: { id: boardId }
-    }).then((Board) => {
-        
-        Board.destroy();
+    }).then((board) => {
+    	Swimlane.findAll({
+	        where: { boardId: boardId }
+	    }).then((swimlanes) => {
+	    	for(var j = 0; j < swimlanes.length; j++){
+	    		var swimlane = swimlanes[j];
+
+	    		var cards = swimlane.getCards().then((cards) => {
+		    		for(var i = 0; i < cards.length; i++){
+		    			cards[i].destroy();
+		    		}
+		    		console.log(swimlane);
+		        	swimlane.destroy();
+		    	});
+	    	}
+		});
+	        
+        board.destroy();
     });
 
     res.send(200);
@@ -270,21 +304,19 @@ function removeSwimlane(req, res, next){
 
     Swimlane.find({
         where: { id: swimlaneId }
-    }).then((Swimlane) => {
-    	Card.find({
-    		where: {id: card_id}
-    	}).then((Card) => {
-    		Card.destroy();
-    	});
-        
-        Swimlane.destroy();
-    
-   
-    // });
+    }).then((swimlane) => {
+    	
+    	var cards = swimlane.getCards().then((cards) => {
+    		for(var i = 0; i < cards.length; i++){
+    			cards[i].destroy();
+    		}
 
-    res.send(200);
+        	swimlane.destroy();
+    	});
+    	res.send(200);
 	});
 }
+
 function removeCards(req, res, next){
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -319,7 +351,7 @@ server.opts('/boards/:board_id', (req, res) =>{
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
     res.send(200);
 });
-server.opts('/swimlanes/:swimlane_id/cards/:cards_id', (req, res) =>{
+server.opts('/swimlanes/:swimlane_id', (req, res) =>{
     res.setHeader('Access-Control-Allow-Origin', "*");
     res.setHeader('Access-Control-Allow-Headers', 'Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
@@ -339,9 +371,11 @@ server.post('/boards', postBoard);
 
 server.post('/boards/:board_id', updateBoardById);
 
+server.get('/boards/:board_id/swimlanes', getSwimlanesByBoardId);
+
 server.get('/swimlanes', getSwimlanes);
 
-server.post('/swimlanes', postSwimlane);
+server.post('/boards/:board_id/swimlanes', postSwimlane);
 
 server.get('/swimlanes/:swimlane_id/cards', getCardBySwimlaneId);
 
@@ -355,7 +389,7 @@ server.post('/cards', postCard);
 // server.post('/boards', linkToViewBoards);
 
 server.del('/boards/:board_id', removeBoard);
-server.del('/swimlanes/:swimlane_id/cards/:card_id', removeSwimlane);
+server.del('/swimlanes/:swimlane_id', removeSwimlane);
 
 server.del('/swimlanes/cards/:card_id', removeCards);
 
