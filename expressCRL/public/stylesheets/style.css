@@ -33,6 +33,7 @@ section {
 
 .header {
     background-color: #005E9C;
+   
 }
 
 #swimlanes {
@@ -45,6 +46,7 @@ section {
 
 html {
     background-color: #006EB7;
+    font-family: 'Roboto', sans-serif;
 }
 
 .swimlane {
@@ -67,7 +69,7 @@ html {
 }
 
 .icons {
-    margin: 33px;
+    margin: 12.5px;
 }
 
 .card {

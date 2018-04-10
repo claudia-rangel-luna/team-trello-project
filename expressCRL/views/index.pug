@@ -1,12 +1,12 @@
 extends layout
 
 block content
-	.d-flex.header
-		h2.boardtitle Home Page: Team Project
-	|
-	section
-		.d-flex.justify-content-center
-			button#addboardbutton.btn.btn-primary.mr-3.mt-3.ml3(type='button') New Board
+	.header.fixedcontainer
+		div.d-flex.justify-content-center
+			h2.homepagetitle Home Page Team Project
+		|
+		div.d-flex.justify-content-center
+			button#addboardbutton New Board
 	|
 	#boards
 	script(src='/javascripts/homepage.js')

@@ -49,7 +49,7 @@ function drawBoard(id, name) {
     var boardHeader = $('<div class="boardHeader">' + name + '</div>');
     newBoard.append(boardHeader);
 
-    var buttons = $('<div class="buttonshomepage"><i class="fas fa-trash-alt icons"></i><i class="fas fa-pencil-alt icons"></i></div>');
+    var buttons = $('<div class="buttonshomepage"><i class="fas fa-trash-alt icons hpbtn"></i><i class="fas fa-pencil-alt icons hpbtn"></i></div>');
     newBoard.append(buttons);
 
     buttons.on('click', '.fa-trash-alt', function(e) {
