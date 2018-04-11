@@ -1,21 +1,38 @@
+var boardId;
+
 $('document').ready(function() {
-    var boardId = getUrlVars()['id'];
+    boardId = getUrlVars()['id'];
+
+    renderBoardTitle(boardId);
     renderExistingSwimlanes(boardId);
     console.log(boardId);
 
     $('#button1').on('click', function() {
         var swimlaneName = prompt('New swimlane name');
         if (swimlaneName == null) {
-            return null;
+            return;
         }
-
+        var trimmedswimlaneName = swimlaneName.trim();
+        if(trimmedswimlaneName === ""){
+            return;
+        }
+        
         var id = getNewId();
         drawSwimlane(id, swimlaneName);
         saveSwimlane(boardId, { id: id, name: swimlaneName });
     });
 });
 
-var newSwimlane;
+function renderBoardTitle(id) {
+    $.ajax({
+            method: "GET",
+            url: "http://localhost:8080/boards/" + id,
+            
+        })
+        .done(function(board) {
+            setBoardTitle(board);
+        });
+}
 
 function renderExistingSwimlanes(boardId) {
     $.ajax({
@@ -61,7 +78,7 @@ function getNewId() {
 }
 
 function drawSwimlane(id, name) {
-    newSwimlane = $('<div id="' + id + '" class="swimlane"></div>');
+    var newSwimlane = $('<div id="' + id + '" class="swimlane"></div>');
 
     moveSwimlanes(id, name, newSwimlane);
 
@@ -86,8 +103,14 @@ function drawSwimlane(id, name) {
     buttons.on('click', '.fa-pencil-alt', function() {
         var newName = prompt('New swimlane name');
         if (newName == null) {
-            return null;
+            return;
         }
+
+        var trimmednewName = newName.trim();
+        if(trimmednewName === ""){
+            return;
+        }
+            
         swimlaneHeader.text(newName);
         updateSwimlane(id, newName);
     });
@@ -95,13 +118,16 @@ function drawSwimlane(id, name) {
     buttons.on('click', '.fa-plus', function() {
         var cardHeader = prompt('New card name');
         if (cardHeader == null) {
-            return null;
-        }
-        var cardDescription = prompt('Card description required');
-        if (cardDescription == null) {
-            return null;
+            return;
         }
 
+        var trimmedcardHeader = cardHeader.trim();
+        if(trimmedcardHeader === ""){
+            return;
+        }
+
+        var cardDescription = prompt('Card description required');
+        
         var cardId = getNewId();
         drawCard(cardId, id, cardHeader, cardDescription, newSwimlane);
         saveCard({ id: cardId, swimlane_id: id, name: cardHeader, cardDescription: cardDescription });
@@ -158,7 +184,8 @@ function drawCard(cardId, swimlaneId, name, cardDescription, newSwimlane) {
     var cardButtons = card.append('<div class="buttons"><i class="fas fa-trash-alt icons"></i><i class="fas fa-pencil-alt pencil_card icons"></i></div>');
 
         cardButtons.on('click', '.fa-trash-alt', function() {
-            var deleteCard = confirm("Are you sure you want to delete swimlane? It may contain cards.");
+            var deleteCard = confirm("Are you sure you want to delete card?");
+            console.log(deleteCard);
             if(deleteCard == false){
                 return null; 
             };
@@ -173,11 +200,21 @@ function drawCard(cardId, swimlaneId, name, cardDescription, newSwimlane) {
     $("#" + swimlaneId).append(card);
 
     cardButtons.on('click', '.fa-trash-alt', function() {
+
         $(this).closest('.card').remove();
     });
 
     cardButtons.on('click', '.pencil_card', function() {
         var newCardName = prompt('New card name');
+        if (newCardName == null) {
+            return;
+        }
+
+        var trimmedCardName = newCardName.trim();
+        if(trimmedCardName === ""){
+            return;
+        }
+
         cardHeader.text(newCardName);
 
         updateCard(cardId, newCardName);
@@ -192,13 +229,21 @@ function drawCard(cardId, swimlaneId, name, cardDescription, newSwimlane) {
     })
 }
 
-function changeTitle() {
+function setBoardTitle(board) {
     var boardTitle = $('.boardtitle');
+    boardTitle.text(board.name);
+    
     boardTitle.on('click', function() {
         var newBoardTitle = prompt("New board title");
         if (newBoardTitle == null){
-            return null;
+            return;
         }  
+
+        var trimmedNewBoardTitle = newBoardTitle.trim();
+            if(trimmedNewBoardTitle === ""){
+                return;
+            }
+
         boardTitle.text(newBoardTitle);
 
         updateBoardTitle(boardId, newBoardTitle);
@@ -206,7 +251,6 @@ function changeTitle() {
 
     });
 }
-changeTitle();
 
 function removeSwimlane(id){
     $.ajax({
@@ -283,15 +327,14 @@ function saveCard(card) {
         });
 }
 
-function updateBoardTitle(id, boardTitle) {
+function updateBoardTitle(id, boardName) {
     $.ajax({
             method: "POST",
-            //not sure what goes here
             url: "http://localhost:8080/boards/" + id,
-            data: { description: cardDescription }
+            data: { name: boardName }
         })
-        .done(function(card) {
-            alert("title updated: " + cardtitle);
+        .done(function(boardTitle) {
+            alert("title updated: " + boardTitle);
         });
 }
 
