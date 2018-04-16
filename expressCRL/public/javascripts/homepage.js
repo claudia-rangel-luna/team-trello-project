@@ -87,7 +87,7 @@ function drawBoard(id, name) {
     });
 
     newBoard.on('click', function(){
-        window.location.href='/boards?id=' + id;
+        window.location.href='/swimlanes?id=' + id;
     });
 
 

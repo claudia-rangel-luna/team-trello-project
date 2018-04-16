@@ -1,12 +1,8 @@
 extends layout
 
 block content
-	.header.fixedcontainer
-		div.d-flex.justify-content-center
-			h2.homepagetitle Welcome to your Home Page!
-		|
-		div.d-flex.justify-content-center
-			button#addboardbutton New Board
-	|
-	#boards
-	script(src='/javascripts/homepage.js')
+	div.navbar
+		a( id="loginbutton" href="/login" ) Login
+	div.logo
+		
+	
