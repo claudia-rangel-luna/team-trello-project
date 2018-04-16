@@ -11,7 +11,7 @@ server.use(restify.plugins.bodyParser());
 
 // setup the mysql configuration
 
-const sql = new Sequelize('Trello', 'root', 'Luna12094*', {
+const sql = new Sequelize('Trello', 'root', 'pizzaseven11', {
     host: 'localhost',
     port: 3306,
     dialect: 'mysql',

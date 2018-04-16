@@ -25,7 +25,7 @@ section {
 }
 
 .boardtitle {
-    margin-left: 30vw;
+    margin-left: 35vw;
     padding-top: 10px;
     color: white;
     font-weight: bold;
@@ -98,4 +98,36 @@ html {
     color: black;
     height: auto;
     overflow: auto;
+}
+.navbar{
+    background-color: #006EB7;
+    height: 400px;
+    
+    
+}
+
+#loginbutton{   
+    color:white;
+    margin-left: 50vw;
+    background-color:#0070FF;
+    padding:10px;
+    border-radius: 4px;
+    padding-left: 15px;
+    padding-right: 15px;
+    text-decoration: none;
+
+}
+#loginbutton:hover{
+    background-color: white;
+    color: #0070FF;
+}
+.logo{
+    display: flex;
+    justify-content: center;
+    background-color: #006EB7;
+}
+#trellologo{
+    width: 750px;
+    height: 150px;
+    align-self: center;
 }
