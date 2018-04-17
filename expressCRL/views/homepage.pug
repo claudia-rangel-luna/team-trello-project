@@ -2,8 +2,11 @@ extends layout
 
 block content
 	.header.fixedcontainer
-		div.d-flex.justify-content-center
-			h2.homepagetitle Welcome to your Home Page!
+		div.topofthepage
+			div.homepagetitlebox.d-flex.justify-content-center
+				h2.homepagetitle Welcome to your Home Page!
+			div.logoutbuttonbox
+				a( id="logoutbutton" href="/logout" ) Log Out
 		|
 		div.d-flex.justify-content-center
 			button#addboardbutton New Board

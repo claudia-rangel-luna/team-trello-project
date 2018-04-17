@@ -2,8 +2,13 @@ extends layout
 
 block content
 	.header.d-flex
-		a#button2.button2(href='http://localhost:3000/boards') Boards
-		h1.boardtitle 
+		div.boardbuttonbox
+			a#button2.button2(href='http://localhost:3000/boards') Boards
+		div.logoutbuttonbox
+			a( id="logoutbuttonswimlane" href="/logout" ) Log Out
+	div.boardtitlebox
+		h1.boardtitle
+	div.addsomespace 
 	|
 	section
 		.d-flex.justify-content-center
