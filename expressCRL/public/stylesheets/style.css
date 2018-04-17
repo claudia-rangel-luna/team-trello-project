@@ -20,7 +20,7 @@ section {
     color: #005E9C;
     text-decoration: none;
 }
-.boardtitlebox{
+.boardtitlebox {
     background-color: #005E9C;
 }
 .boardtitle {
@@ -89,7 +89,7 @@ html {
     height: auto;
     overflow: auto;
 }
-.navbar{
+.navbar {
     background-color: #006EB7;
     height: 400px;
 }
@@ -102,33 +102,30 @@ html {
     padding-right: 15px;
     text-decoration: none;
 }
-#loginbutton:hover{
+#loginbutton:hover {
     background-color: white;
     color: #0070FF;
 }
-
-#welcome{
+#welcome {
     margin-left: 41vw;
     color: white;
     font-weight: bold;
-    
 }
-.login{
+.login {
     display: flex;
     justify-content: center;
     background-color: #006EB7;
 }
-.boardbuttonbox{
+.boardbuttonbox {
     display: flex;
     justify-content: flex-start;
-    flex:50%;
+    flex: 50%;
 }
-.addsomespace{
+.addsomespace {
     height: 3vh;
-    background-color:#005E9C; 
+    background-color: #005E9C;
 }
-
-#logoutbuttonswimlane{
+#logoutbuttonswimlane {
     background-color: #0260db;
     color: white;
     padding: 10px;
@@ -138,7 +135,7 @@ html {
     margin-right: 5vw;
     margin-top: 10px;
 }
-#logoutbuttonswimlane:hover{
+#logoutbuttonswimlane:hover {
     background-color: white;
     color: #0070FF
 }
