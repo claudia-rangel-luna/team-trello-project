@@ -20,7 +20,9 @@
     "passport": "^0.4.0",
     "passport-auth0": "^0.6.1",
     "pug": "2.0.0-beta11",
-    "serve-favicon": "~2.4.5",
+    "request": "^2.85.0",
+    "request-promise": "^4.2.2",
+    "serve-favicon": "^2.4.5",
     "uuid": "^3.2.1"
   },
   "main": "app.js",

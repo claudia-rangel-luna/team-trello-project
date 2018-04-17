@@ -10,6 +10,7 @@ const dotenv = require('dotenv');
 const passport = require('passport');
 const Auth0Strategy = require('passport-auth0');
 const flash = require('connect-flash');
+var requestPromise = require('request-promise');
 
 dotenv.load();
 
