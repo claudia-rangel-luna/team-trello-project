@@ -11,7 +11,7 @@ server.use(restify.plugins.bodyParser());
 
 // setup the mysql configuration
 
-const sql = new Sequelize('Trello', 'root', 'pizzaseven11', {
+const sql = new Sequelize('Trello', 'root', 'Luna12094*', {
     host: 'localhost',
     port: 3306,
     dialect: 'mysql',
@@ -34,6 +34,11 @@ sql
         console.log("There was an error when connecting!");
     });
 
+var User = sql.define('users', {
+    id: { type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4 },
+    name: { type: Sequelize.STRING }    
+});
+
 var Board = sql.define('boards', {
     id: { type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4 },
     name: { type: Sequelize.STRING }
@@ -52,6 +57,8 @@ var Card = sql.define('cards', {
 
 
 // create associations
+User.hasMany(Board);
+Board.belongsTo(User);
 Board.hasMany(Swimlane);
 Swimlane.hasMany(Card);
 Card.belongsTo(Swimlane);
@@ -115,13 +122,14 @@ function postBoard(req, res, next) {
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
     console.log(req.body);
-
+    
 
     // save the new message to the collection
     Board.create({
         id: req.body.id,
         name: req.body.name
     }).then((board) => {
+
         res.send(board);
     });
 
@@ -343,10 +351,32 @@ function getBoard(req, res, next){
     Board.find({
     	where: {id: req.params.board_id}
     }).then((board) => {
-    	res.send(board)
+    	res.send(board);
     })
 }
+function getUser(req, res, next){
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
+    User.find({
+        where: {id: req.params.user_id}
+    }).then((user) => {
+        res.send(user);
+    });
+}
+
+function postUser(req, res, next){
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+
+    User.create({
+        id: req.body.id,
+        name: req.body.name
+    }).then((user) => {
+        res.send(user);
+    });
+
+}
 // Set up our routes and start the server
 server.opts('/boards/:board_id', (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', "*");
@@ -366,6 +396,10 @@ server.opts('/swimlanes/cards/:card_id', (req, res) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
     res.send(200);
 });
+
+server.get('/users/:user_id', getUser);
+
+server.post('/users', postUser);
 
 server.get('/boards', getBoards);
 

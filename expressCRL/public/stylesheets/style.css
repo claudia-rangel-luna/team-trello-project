@@ -3,13 +3,10 @@ section {
     font-family: sans-serif;
     padding-bottom: 17px;
 }
-
-
 #button1:hover {
     background-color: white;
     color: #005E9C;
 }
-
 #button2 {
     background-color: #0070FF;
     margin-top: 10px;
@@ -17,14 +14,11 @@ section {
     border-radius: 4px;
     padding: 10px;
     margin-left: 5vw;
-    
 }
-
 #button2:hover {
     background-color: white;
     color: #005E9C;
     text-decoration: none;
-
 }
 .boardtitlebox{
     background-color: #005E9C;
@@ -36,15 +30,10 @@ section {
     font-weight: bold;
     margin-bottom: 0px;
 }
-
 .header {
     background-color: #005E9C;
     display: flex;
-
-   
-   
 }
-
 #swimlanes {
     display: flex;
     flex-wrap: nowrap;
@@ -52,12 +41,10 @@ section {
     position: relative;
     background-color: #006EB7;
 }
-
 html {
     background-color: #006EB7;
     font-family: 'Roboto', sans-serif;
 }
-
 .swimlane {
     border: 1px solid black;
     min-width: 300px;
@@ -70,17 +57,14 @@ html {
     position: absolute;
     border-radius: 4px;
 }
-
 .swimlaneHeader {
     margin: 10px;
     text-align: center;
     font-weight: bold;
 }
-
 .icons {
     margin: 12.5px;
 }
-
 .card {
     min-height: 200px;
     background-color: white;
@@ -91,15 +75,12 @@ html {
     padding-left: 10px;
     padding-right: 10px;
 }
-
 .cardHeader {
     text-align: center;
 }
-
 .card-white {
     background-color: #d0d7e2;
 }
-
 .cardDescription {
     padding-left: 20px;
     font-family: 'Roboto', sans-serif;
@@ -111,12 +92,7 @@ html {
 .navbar{
     background-color: #006EB7;
     height: 400px;
-
-    
-    
-    
 }
-
 #loginbutton{   
     color:white;
     background-color:#0070FF;
@@ -125,7 +101,6 @@ html {
     padding-left: 15px;
     padding-right: 15px;
     text-decoration: none;
-
 }
 #loginbutton:hover{
     background-color: white;

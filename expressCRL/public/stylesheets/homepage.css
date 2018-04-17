@@ -24,10 +24,7 @@
 	visibility: visible;
 	background-color: #0260db;
 	color: white;
-
-	
 }
-
 .boardHeader{
 	text-overflow: ellipsis;
 	white-space: nowrap;
