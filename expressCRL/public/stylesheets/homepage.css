@@ -3,7 +3,7 @@
 	background-color: #006EB7;
 }
 .board{
-	margin-top: 200px;
+	margin-top: 250px;
 	background-color: #0070FF;
 	min-width:300px;
 	flex-wrap: wrap-reverse;
@@ -63,7 +63,29 @@
 	font-family: 'Roboto', sans-serif;
 	margin-top: 25px;
 }
+#logoutbutton{
+	background-color: #0260db;
+	color: white;
+	padding: 7px;
+	text-decoration: none;
+	border-radius: 4px;
+	border:none;
+	float: right;
+	margin-right: 5vw;
 
+
+}
+#logoutbutton:hover{
+	background-color: white;
+	color: #0260db; 
+
+}
+.logoutbuttonbox{
+	display: flex;
+	justify-content: flex-end;
+	background-color:#005E9C;
+	flex:50%; 
+}
 
 
 
