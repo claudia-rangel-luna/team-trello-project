@@ -67,15 +67,19 @@ Swimlane.belongsTo(Board);
 
 sql.sync();
 
-function getBoards(req, res, next) {
+function getBoardsByUserId(req, res, next) {
     // Restify currently has a bug which doesn't allow you to set default headers
     // These headers comply with CORS and allow us to serve our response to any origin
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
+    var userId = req.params.user_id;
+
     //find the appropriate data
-    Board.findAll().then((Board) => {
-        res.send(Board);
+    Board.findAll({
+        where: { userId: userId }
+    }).then((boards) => {
+        res.send(boards);
     });
 }
 
@@ -122,17 +126,21 @@ function postBoard(req, res, next) {
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
     console.log(req.body);
-    
+    var userId = req.params.user_id;
 
     // save the new message to the collection
-    Board.create({
-        id: req.body.id,
-        name: req.body.name
-    }).then((board) => {
 
-        res.send(board);
+    User.find({
+        where: { id: userId }
+    }).then((user) => {
+        Board.create({
+            id: req.body.id,
+            name: req.body.name
+        }).then((board) => {
+            board.setUser(user)
+            res.send(board);
+        });
     });
-
 }
 
 function postSwimlane(req, res, next) {
@@ -347,7 +355,6 @@ function getBoard(req, res, next){
 	res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
-
     Board.find({
     	where: {id: req.params.board_id}
     }).then((board) => {
@@ -378,12 +385,25 @@ function postUser(req, res, next){
 
 }
 // Set up our routes and start the server
+server.opts('/users/:user_id', (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', "*");
+    res.setHeader('Access-Control-Allow-Headers', 'Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+    res.send(200);
+});
+server.opts('/users/boards/:board_id', (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', "*");
+    res.setHeader('Access-Control-Allow-Headers', 'Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+    res.send(200);
+}); 
 server.opts('/boards/:board_id', (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', "*");
     res.setHeader('Access-Control-Allow-Headers', 'Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
     res.send(200);
-}); server.opts('/swimlanes/:swimlane_id', (req, res) => {
+});
+server.opts('/swimlanes/:swimlane_id', (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', "*");
     res.setHeader('Access-Control-Allow-Headers', 'Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
@@ -401,13 +421,13 @@ server.get('/users/:user_id', getUser);
 
 server.post('/users', postUser);
 
-server.get('/boards', getBoards);
+server.get('/users/:user_id/boards', getBoardsByUserId);
 
-server.get('/boards/:board_id', getBoard);
+server.get('/users/boards/:board_id', getBoard);
 
-server.post('/boards', postBoard);
+server.post('/users/:user_id/boards', postBoard);
 
-server.post('/boards/:board_id', updateBoardById);
+server.post('/users/boards/:board_id', updateBoardById);
 
 server.get('/boards/:board_id/swimlanes', getSwimlanesByBoardId);
 
@@ -421,9 +441,9 @@ server.post('/swimlanes/:swimlane_id', updateSwimlaneById);
 
 server.post('/swimlanes/cards/:card_id', updateCardById);
 
-server.get('/cards', getCards); server.post('/cards', postCard);
+server.get('/cards', getCards); 
 
-// server.post('/boards', linkToViewBoards);
+server.post('/cards', postCard);
 
 server.del('/boards/:board_id', removeBoard); 
 

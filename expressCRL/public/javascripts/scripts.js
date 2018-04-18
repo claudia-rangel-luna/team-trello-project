@@ -26,7 +26,7 @@ $('document').ready(function() {
 function renderBoardTitle(id) {
     $.ajax({
             method: "GET",
-            url: "http://localhost:8080/boards/" + id,
+            url: "http://localhost:8080/users/boards/" + id,
             
         })
         .done(function(board) {
