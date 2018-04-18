@@ -1,7 +1,14 @@
+var userId;
+
 $('document').ready(function() {
-    renderExistingBoards();
+    userId = getUrlVars()['id'];
+
+    console.log(userId);
+
+    renderExistingBoards(userId);
 
     $('#addboardbutton').on('click', function() {
+        console.log('Button clicked');
         var boardName = prompt('New  board name');
             if (boardName == null) {
                 return null;
@@ -14,16 +21,16 @@ $('document').ready(function() {
             
         var id = getNewId();
         drawBoard(id, boardName);
-        saveBoard({ id: id, name: boardName });
+        saveBoard(userId, { id: id, name: boardName });
     });
 });
 
 var newBoard;
 
-function renderExistingBoards() {
+function renderExistingBoards(userId) {
     $.ajax({
             method: "GET",
-            url: "http://localhost:8080/boards",
+            url: "http://localhost:8080/users/" + userId + "/boards",
 
         })
         .done(function(boards) {
@@ -118,17 +125,17 @@ function moveBoards(id, name, newBoard) {
 function removeBoard(id){
     $.ajax({
             method: "DELETE",
-            url: "http://localhost:8080/boards/" + id
+            url: "http://localhost:8080/users/boards/" + id
         })
         .done(function(board) {
             alert("Board deleted: " + board);
         });
 }
 
-function saveBoard(board) {
+function saveBoard(userId, board) {
     $.ajax({
             method: "POST",
-            url: "http://localhost:8080/boards",
+            url: "http://localhost:8080/users/" + userId + "/boards" ,
             data: board
         })
         .done(function(board) {
@@ -139,10 +146,23 @@ function saveBoard(board) {
 function updateBoard(id, name) {
     $.ajax({
             method: "POST",
-            url: "http://localhost:8080/boards/" + id,
+            url: "http://localhost:8080/users/boards/" + id,
             data: { name: name }
         })
         .done(function(board) {
             alert("Board Updated: " + board);
         });
+}
+
+function getUrlVars()
+{
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+    }
+    return vars;
 }
