@@ -5,20 +5,14 @@ block content
 		div.topofthepage
 			div.homepagetitlebox.d-flex.justify-content-center
 				h2.homepagetitle Welcome to your Home Page!
+			script.stripe-button(src='https://checkout.stripe.com/checkout.js', data-key='pk_test_EjqEMgnuYhOyast1Tc93FQrt', data-amount='500', data-name='Project', data-description='Widget', data-image='https://stripe.com/img/documentation/checkout/marketplace.png', data-locale='auto')
 			div.logoutbuttonbox
 				a( id="logoutbutton" href="/logout" ) Log Out
 		|
 		div.d-flex.justify-content-center
 			button#addboardbutton New Board
-		form(action="/charge", method="post")
-			article
-			label 
 	|
 	#boards
 	script(src='/javascripts/homepage.js')
 	script(src='https://js.stripe.com/v3/')
-	script(
-		src="//checkout.stripe.com/v2/checkout.js", class="stripe-button",data-key=keyPublishable,
-		data-locale="auto",
-		data-description="Sample Charge",
-		data-amount="500")
+	
