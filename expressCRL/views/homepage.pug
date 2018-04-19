@@ -10,6 +10,15 @@ block content
 		|
 		div.d-flex.justify-content-center
 			button#addboardbutton New Board
+		form(action="/charge", method="post")
+			article
+			label 
 	|
 	#boards
 	script(src='/javascripts/homepage.js')
+	script(src='https://js.stripe.com/v3/')
+	script(
+		src="//checkout.stripe.com/v2/checkout.js", class="stripe-button",data-key=keyPublishable,
+		data-locale="auto",
+		data-description="Sample Charge",
+		data-amount="500")

@@ -20,6 +20,17 @@ var homepage = require('./routes/homepage');
 var swimlanes = require('./routes/swimlanes')
 var app = express();
 
+const keyPublishable = process.env.PUBLISHABLE_KEY;
+const keySecret = process.env.SECRET_KEY;
+
+const stripe = require("stripe")(keySecret);
+
+// var stripe = Stripe('pk_test_EjqEMgnuYhOyast1Tc93FQrt');
+// var elements = stripe.elements();
+
+app.set("view engine", "pug");
+app.use(require("body-parser").urlencoded({extended: false}));
+
 // This will configure Passport to use Auth0
 const strategy = new Auth0Strategy({
         domain: process.env.AUTH0_DOMAIN,
@@ -129,6 +140,28 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
+
+app.get("/", (req, res) =>
+  res.render("homepage.pug", {keyPublishable}));
+
+app.post("/charge", (req, res) => {
+  let amount = 500;
+
+  stripe.customers.create({
+     email: req.body.stripeEmail,
+    source: req.body.stripeToken
+  })
+  .then(customer =>
+    stripe.charges.create({
+      amount,
+      description: "Sample Charge",
+         currency: "usd",
+         customer: customer.id
+    }))
+  .then(charge => res.render("charge.pug"));
+});
+
+app.listen(4567);
 
 module.exports = app;
 
