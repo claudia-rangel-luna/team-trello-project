@@ -20,6 +20,9 @@
 .hpbtn:hover{
 	color: lightgray;
 }
+.stripe-button{
+	margin: 50px;
+}
 .board:hover{
 	visibility: visible;
 	background-color: #0260db;
