@@ -36,7 +36,7 @@ sql
 
 var User = sql.define('users', {
     id: { type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4 },
-    nickname: {type: Sequelize.STRING },
+    // nickname: {type: Sequelize.STRING },
     name: { type: Sequelize.STRING }    
 });
 
@@ -75,10 +75,10 @@ function getBoardsByUserId(req, res, next) {
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
     var userId = req.params.user_id;
-    var nickname = req.params.user.nickname;
+    // var nickname = req.params.user.nickname;
     //find the appropriate data
     Board.findAll({
-        where: { userId: userId, nickname: nickname }
+        where: { userId: userId}
     }).then((boards) => {
         res.send(boards);
     });

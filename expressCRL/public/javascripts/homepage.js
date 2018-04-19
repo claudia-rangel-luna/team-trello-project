@@ -1,12 +1,12 @@
 var userId;
-var username;
+// var username;
 $('document').ready(function() {
     userId = getUrlVars()['id'];
-    username = getUrlVars()['nickname'];
+    // username = getUrlVars()['nickname'];
     console.log(userId);
 
-    renderExistingBoards(userId, username);
-    renderUsername(username);
+    renderExistingBoards(userId);
+    // renderUsername(username);
 
     $('#addboardbutton').on('click', function() {
         console.log('Button clicked');
@@ -28,14 +28,14 @@ $('document').ready(function() {
 });
 
 var newBoard;
-function renderUsername(username){
-    $('.homepagetitlebox').append('<h2 class="homepagetitle">'+ username +', Welcome to your Home Page!</h2>');
-}
+// function renderUsername(username){
+//     $('.homepagetitlebox').append('<h2 class="homepagetitle">'+ username +', Welcome to your Home Page!</h2>');
+// }
 
 function renderExistingBoards(userId, username) {
     $.ajax({
             method: "GET",
-            url: "http://localhost:8080/users/" + userId + username + "/boards",
+            url: "http://localhost:8080/users/" + userId + "/boards",
 
         })
         .done(function(boards) {
