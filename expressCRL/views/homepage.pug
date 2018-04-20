@@ -4,7 +4,7 @@ block content
 	.header.fixedcontainer
 		div.topofthepage
 			div.homepagetitlebox.d-flex.justify-content-center
-				h2.homepagetitle Welcome to your Home Page!
+				h2.homepagetitle #{user.displayName}, Welcome to your Home Page!
 			div.logoutandstripebuttonbox
 				div.stripebuttonbox
 					script.stripe-button(src='https://checkout.stripe.com/checkout.js', data-key='pk_test_EjqEMgnuYhOyast1Tc93FQrt', data-amount='500', data-name='Project', data-description='Widget', data-image='https://stripe.com/img/documentation/checkout/marketplace.png', data-locale='auto')
