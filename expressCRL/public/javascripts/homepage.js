@@ -1,11 +1,12 @@
 var userId;
-
+// var username;
 $('document').ready(function() {
     userId = getUrlVars()['id'];
-
+    // username = getUrlVars()['nickname'];
     console.log(userId);
 
     renderExistingBoards(userId);
+    // renderUsername(username);
 
     $('#addboardbutton').on('click', function() {
         console.log('Button clicked');
@@ -23,11 +24,15 @@ $('document').ready(function() {
         drawBoard(id, boardName);
         saveBoard(userId, { id: id, name: boardName });
     });
+        
 });
 
 var newBoard;
+// function renderUsername(username){
+//     $('.homepagetitlebox').append('<h2 class="homepagetitle">'+ username +', Welcome to your Home Page!</h2>');
+// }
 
-function renderExistingBoards(userId) {
+function renderExistingBoards(userId, username) {
     $.ajax({
             method: "GET",
             url: "http://localhost:8080/users/" + userId + "/boards",

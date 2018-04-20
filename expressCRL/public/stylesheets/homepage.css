@@ -86,7 +86,17 @@
 	background-color:#005E9C;
 	flex:50%; 
 }
-
+.logoutandstripebuttonbox{
+	display: flex;
+}
+.stripebuttonbox{
+	display: flex;
+	justify-content: flex-start;
+	flex:50%;
+}
+.stripe-button-el{
+	 margin-left: 5vw;
+}
 
 
 
