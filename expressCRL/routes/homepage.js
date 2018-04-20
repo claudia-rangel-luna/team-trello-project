@@ -87,7 +87,7 @@ router.get('/callback',
 
             })
             .catch(function(err) {
-                alert("Error logging in, user already entered");
+                console.log("Error logging in, user already entered");
             });
     });
 //if it doesnt exsist add it to the data base
